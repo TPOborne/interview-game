@@ -8,7 +8,7 @@ import WebSocket, { WebSocketServer } from "ws";
 
 const app = express();
 const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, "/public")));
+app.use(express.static(path.join(__dirname, "/dist")));
 
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
