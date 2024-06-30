@@ -1,10 +1,11 @@
+/* eslint-disable no-undef */
 "use strict";
 
 import express from "express";
 import path from "path";
 import { createServer } from "http";
 
-import WebSocket, { WebSocketServer } from "ws";
+import { WebSocketServer } from "ws";
 
 const app = express();
 const __dirname = path.resolve();
