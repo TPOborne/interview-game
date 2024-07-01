@@ -13,7 +13,7 @@ const App = () => {
 
     // Connection opened
     ws.addEventListener("open", (event) => {
-      ws.send("Connection established");
+      ws.send(JSON.stringify({ message: "Hello I am client" }));
     })
 
     // Listen for messages
