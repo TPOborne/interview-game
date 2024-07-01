@@ -31,9 +31,11 @@ const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
 wss.on("connection", (ws) => {
+  ws.send("hello friend");
+
   const id = setInterval(() => {
     ws.send(JSON.stringify(process.memoryUsage()), () => {});
-  }, 100);
+  }, 1000);
   console.log("started client inverval");
 
   ws.on("close", () => {
