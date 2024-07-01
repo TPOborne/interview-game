@@ -9,7 +9,21 @@ import { WebSocketServer } from "ws";
 
 const app = express();
 const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, "/dist")));
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/dist")));
+} else {
+  (async () => {
+    const { createProxyMiddleware } = await import("http-proxy-middleware");
+    app.use(
+      "/",
+      createProxyMiddleware({
+        target: "http://localhost:5173",
+        changeOrigin: true,
+      })
+    );
+  })();
+}
 
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
