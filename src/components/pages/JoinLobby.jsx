@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useWebSocket } from '../../contexts/WebSocketContext';
+import { ACTIONS } from '../../constants';
 
 const JoinLobby = ({ nextHandler }) => {
+  const ws = useWebSocket();
   const [name, setName] = useState('');
   const [code, setCode] = useState('');
 
@@ -11,8 +14,15 @@ const JoinLobby = ({ nextHandler }) => {
 
   const handleCode = (event) => {
     const { value } = event.target;
-    setCode(value);
+    setCode(value.toUpperCase());
   };
+
+  const handleJoin = () => {
+    ws.current.send(
+      JSON.stringify({ action: ACTIONS.JOIN_ROOM, username: name, roomCode: code })
+    );
+    nextHandler();
+  }
 
   return (
     <div className="infoWrapper">
@@ -30,7 +40,7 @@ const JoinLobby = ({ nextHandler }) => {
           </article>
         </div>
         <div className="buttonsWrapper">
-          <button onClick={nextHandler}>Join</button>
+          <button onClick={handleJoin}>Join</button>
         </div>
       </div>
     </div >

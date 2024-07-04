@@ -1,16 +1,20 @@
-"use strict";
-
 import express from "express";
 import path from "path";
 import { createServer } from "http";
-
 import { WebSocketServer } from "ws";
+import { ACTIONS } from "./src/constants/index.js";
+import { generateRandomCode } from "./src/utils/serverUtils.js";
+import {
+  createRoom,
+  joinRoom,
+  removeUserFromRooms,
+  displayRooms,
+} from "./server/roomManager.js";
 
 const app = express();
 const __dirname = path.resolve();
 
-console.log(process.env.NODE_ENV);
-
+// Serve static files in production or proxy in development
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/dist")));
 } else {
@@ -29,28 +33,46 @@ if (process.env.NODE_ENV === "production") {
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
-wss.broadcast = (data) => {
-  wss.clients.forEach((client) => {
-    if (client.readyState === client.OPEN) {
-      client.send(data);
-    }
-  });
-};
-
 wss.on("connection", (ws) => {
-  ws.send(JSON.stringify({ message: "hello from server" }));
-  console.log("client connected");
+  console.log("WebSocket connection established");
 
   ws.on("message", (message) => {
-    console.log(message.toString());
-    // wss.broadcast(message.toString());
+    if (!message) {
+      console.warn("No data passed in message");
+      return;
+    }
+    let parsedMessage = null;
+    try {
+      parsedMessage = JSON.parse(message);
+    } catch (error) {
+      console.error("Error parsing message:", error.message);
+      return;
+    }
+    const { action, username, roomCode } = parsedMessage;
+
+    switch (action) {
+      case ACTIONS.CREATE_ROOM:
+        createRoom(generateRandomCode(), ws, username);
+        break;
+      case ACTIONS.JOIN_ROOM:
+        if (!roomCode || !username) {
+          console.warn("Missing roomCode or username");
+          return;
+        }
+        joinRoom(roomCode, ws, username);
+        break;
+      default:
+        console.log("Unknown action", action);
+    }
   });
 
   ws.on("close", () => {
-    console.log("client disconnected");
+    console.log("WebSocket connection closed");
+    removeUserFromRooms(ws);
+    displayRooms();
   });
 });
 
 server.listen(8080, () => {
-  console.log("Listening on http://localhost:8080");
+  console.log("WebSocket server is running on http://localhost:8080");
 });

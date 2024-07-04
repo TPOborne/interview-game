@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useWebSocket } from '../../contexts/WebSocketContext';
+import { ACTIONS } from '../../constants';
 
 const CreateLobby = ({ nextHandler }) => {
+  const ws = useWebSocket();
   const [name, setName] = useState('');
 
   const handleInput = (event) => {
@@ -9,6 +12,10 @@ const CreateLobby = ({ nextHandler }) => {
   };
 
   const handleCreate = (event) => {
+    if (!name.length) return;
+    ws.current.send(
+      JSON.stringify({ action: ACTIONS.CREATE_ROOM, username: name })
+    );
     nextHandler(event, 3);
   }
 
@@ -21,7 +28,7 @@ const CreateLobby = ({ nextHandler }) => {
           <input type="text" value={name} onChange={handleInput} />
         </article>
         <div className="buttonsWrapper">
-          <button onClick={handleCreate}>Create</button>
+          <button onClick={handleCreate} disabled={name.length < 2}>Create</button>
         </div>
       </div>
     </div >

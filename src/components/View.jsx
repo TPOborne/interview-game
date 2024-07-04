@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import Game from './pages/Game';
 import CreateLobby from './pages/CreateLobby';
 import JoinLobby from './pages/JoinLobby';
 import Lobby from './pages/Lobby';
+import { useWebSocket } from '../contexts/WebSocketContext';
 
 const View = () => {
+	const ws = useWebSocket();
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [roomData, setRoomData] = useState({
-		code: 'WXYZ',
+		code: 'ABCD',
 		players: [],
 	});
 
@@ -20,7 +22,34 @@ const View = () => {
 			setCurrentIndex(nextView);
 		}
 	}
-	// const handleRestart = () => setCurrentIndex(0);
+
+	useEffect(() => {
+		const handleWebSocketMessage = (event) => {
+			try {
+				const { action, roomCode, players } = JSON.parse(event.data);
+				switch (action) {
+					case 'UPDATE_ROOM':
+						setRoomData({ ...roomData, code: roomCode, players });
+						break;
+					default:
+						console.log("Unhandled action from server:", action);
+						break;
+				}
+			} catch (error) {
+				console.error('Error parsing WebSocket message:', error);
+			}
+		};
+
+		if (ws.current) {
+			ws.current.addEventListener("message", handleWebSocketMessage);
+		}
+
+		return () => {
+			if (ws.current) {
+				ws.current.removeEventListener("message", handleWebSocketMessage);
+			}
+		};
+	}, [ws, currentIndex]);
 
 	return (
 		<main>

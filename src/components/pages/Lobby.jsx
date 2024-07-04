@@ -1,5 +1,6 @@
 const Lobby = ({ nextHandler, roomData }) => {
   const { code, players } = roomData;
+
   return (
     <div className="infoWrapper">
       <div className="info">

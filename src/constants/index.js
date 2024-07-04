@@ -1,0 +1,6 @@
+export const ACTIONS = {
+  CREATE_ROOM: "CREATE_ROOM",
+  JOIN_ROOM: "JOIN_ROOM",
+  START: "START",
+  UPDATE_ROOM: "UPDATE_ROOM",
+};
