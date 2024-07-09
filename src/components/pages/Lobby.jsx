@@ -1,5 +1,13 @@
-const Lobby = ({ nextHandler, roomData }) => {
+import { useState } from 'react';
+
+const Lobby = ({ startHandler, roomData }) => {
   const { code, players } = roomData;
+  const [disabled, setDisabled] = useState(false);
+
+  const handleStart = () => {
+    setDisabled(true);
+    startHandler();
+  };
 
   return (
     <div className="infoWrapper">
@@ -8,11 +16,11 @@ const Lobby = ({ nextHandler, roomData }) => {
         <article>
           <h2>Code: {code}</h2>
           <ul>
-            {players.map((player, index) => <li key={index}>{player}</li>)}
+            {players.map((player, index) => <li key={index}>{player.name}</li>)}
           </ul>
         </article>
         <div className="buttonsWrapper">
-          <button onClick={nextHandler}>Start</button>
+          <button onClick={handleStart} disabled={disabled}>Start</button>
         </div>
       </div>
     </div >

@@ -95,7 +95,7 @@ button {
   display: grid;
   gap: 1em;
   grid-template-columns: repeat(3, 1fr);
-  padding: 50px;
+  padding: 40px 50px;
 }
 
 .tile {
@@ -109,7 +109,7 @@ button {
   font-size: 2em;
   cursor: pointer;
   &:nth-child(5) {
-    background-color: #a2dd9a;
+    background-color: #ffef99;
   }
   &.selected {
     background: #b6e5f7;
@@ -149,3 +149,85 @@ input {
   text-align: center;
   width: 60%;
 }
+
+.playerScoresWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-bottom: 30px;
+  .playerScore {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 2px solid black;
+    padding: 10px;
+    position: relative;
+    h6 {
+      position: absolute;
+      top: -30px;
+      background: #a2dd9a;
+      border-radius: .4em;
+      padding: 8px;
+      color: white;
+      &::after {
+        content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border: 10px solid transparent;
+          border-top-color: #a2dd9a;
+          border-bottom: 0;
+          margin-left: -10px;
+          margin-bottom: -9px;
+      }
+    }
+  }
+}
+
+.errorPopup {
+  background: #ff5d5d;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: calc(100% - 60px);
+  padding: 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.textCorrect {
+  color: #a2dd9a;
+  animation: fadeOut 1.5s;
+}
+
+.textWrong {
+  color: #ff5d5d;
+}
+
+.correct {
+  background: #a2dd9a !important;
+}
+
+.wrong {
+  background: #ff5d5d !important;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1
+  }
+  80% {
+    opacity: 1
+  }
+  100% {
+    opacity: 0
+  }
+}
+

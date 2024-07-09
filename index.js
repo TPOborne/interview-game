@@ -9,6 +9,8 @@ import {
   joinRoom,
   removeUserFromRooms,
   displayRooms,
+  submitWord,
+  startGame,
 } from "./server/roomManager.js";
 
 const app = express();
@@ -34,8 +36,6 @@ const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
 wss.on("connection", (ws) => {
-  console.log("WebSocket connection established");
-
   ws.on("message", (message) => {
     if (!message) {
       console.warn("No data passed in message");
@@ -48,18 +48,24 @@ wss.on("connection", (ws) => {
       console.error("Error parsing message:", error.message);
       return;
     }
-    const { action, username, roomCode } = parsedMessage;
+    const { action, id, username, roomCode, word } = parsedMessage;
 
     switch (action) {
       case ACTIONS.CREATE_ROOM:
-        createRoom(generateRandomCode(), ws, username);
+        createRoom(generateRandomCode(), ws, id, username);
         break;
       case ACTIONS.JOIN_ROOM:
         if (!roomCode || !username) {
           console.warn("Missing roomCode or username");
           return;
         }
-        joinRoom(roomCode, ws, username);
+        joinRoom(roomCode, ws, id, username);
+        break;
+      case ACTIONS.START:
+        startGame(roomCode);
+        break;
+      case ACTIONS.SUBMIT_WORD:
+        submitWord(ws, roomCode, word);
         break;
       default:
         console.log("Unknown action", action);

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useWebSocket } from '../../contexts/WebSocketContext';
 import { ACTIONS } from '../../constants';
 
-const JoinLobby = ({ nextHandler }) => {
+const JoinLobby = ({ playerId }) => {
   const ws = useWebSocket();
   const [name, setName] = useState('');
   const [code, setCode] = useState('');
@@ -18,10 +18,10 @@ const JoinLobby = ({ nextHandler }) => {
   };
 
   const handleJoin = () => {
+    if (!name || code.length !== 4) return;
     ws.current.send(
-      JSON.stringify({ action: ACTIONS.JOIN_ROOM, username: name, roomCode: code })
+      JSON.stringify({ action: ACTIONS.JOIN_ROOM, id: playerId, username: name, roomCode: code })
     );
-    nextHandler();
   }
 
   return (

@@ -16,11 +16,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
     "express": "^4.19.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "uuid": "^10.0.0",
     "vite-plugin-svgr": "^4.2.0",
-    "@vitejs/plugin-react": "^4.2.1",
     "ws": "^8.17.1"
   },
   "devDependencies": {
