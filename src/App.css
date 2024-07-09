@@ -93,9 +93,9 @@ button {
 
 .grid {
   display: grid;
-  gap: 1em;
+  gap: 0.5em;
   grid-template-columns: repeat(3, 1fr);
-  padding: 40px 50px;
+  padding: 20px 60px;
 }
 
 .tile {
@@ -130,7 +130,6 @@ button {
 .iconWrapper {
   max-width: 40px;
   max-height: 40px;
-  padding: 10px;
   border-radius: 50%;
   cursor: pointer;
   &:hover {
