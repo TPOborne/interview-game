@@ -50,9 +50,14 @@ footer {
     align-items: center;
     justify-content: space-between;
     height: 370px;
+    .articleWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
     article {
       h2 {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
       }
     }
     .buttonsWrapper {

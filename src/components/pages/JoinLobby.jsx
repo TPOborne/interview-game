@@ -28,12 +28,11 @@ const JoinLobby = ({ playerId }) => {
     <div className="infoWrapper">
       <div className="info">
         <h1>Join Lobby</h1>
-        <div>
+        <div className="articleWrapper">
           <article>
             <h2>Player name</h2>
             <input type="text" value={name} onChange={handleName} maxLength={12} />
           </article>
-          <br />
           <article>
             <h2>Code</h2>
             <input type="text" value={code} onChange={handleCode} maxLength={4} />
