@@ -18,6 +18,7 @@ const Game = ({ roomData, playerId }) => {
   const prevRoomData = useRef();
 
   const handleClick = (selectedLetter) => {
+    if (animating) return;
     setLetters((prev) => (prev.map((letter) => letter.id === selectedLetter.id ? { ...selectedLetter, selected: true } : letter)));
     if (!selectedLetter.selected) {
       setWord((prev) => prev.concat(selectedLetter.value));
