@@ -58,20 +58,22 @@ const Game = ({ roomData, playerId, wordList }) => {
     const previous = prevRoomData.current;
     if (previous) {
       if (roomData !== previous) {
-        const changedPlayer = roomData.players.find((player, index) => player.words.length !== previous.players[index].words.length);
-        const newWord = changedPlayer.words[changedPlayer.words.length - 1];
-        setLatestWords((prev) => {
-          const words = { ...prev };
-          words[changedPlayer.id] = newWord;
-          return words;
-        });
-        setTimeout(() => {
+        const changedPlayer = roomData.players.find((player) => player.words.length !== previous.players.find(({id}) => id === player.id).words.length);
+        if (changedPlayer) {
+          const newWord = changedPlayer.words[changedPlayer.words.length - 1];
           setLatestWords((prev) => {
             const words = { ...prev };
-            words[changedPlayer.id] = null;
+            words[changedPlayer.id] = newWord;
             return words;
           });
-        }, 1500);
+          setTimeout(() => {
+            setLatestWords((prev) => {
+              const words = { ...prev };
+              words[changedPlayer.id] = null;
+              return words;
+            });
+          }, 1500);
+        }
       }
     }
     prevRoomData.current = roomData;

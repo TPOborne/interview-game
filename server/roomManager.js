@@ -12,35 +12,41 @@ const getRoom = (roomCode) => {
   return room;
 };
 
-export const createRoom = (room, socket, id, username, word) => {
-  if (!rooms[room]) {
-    rooms[room] = { letters: splitAndShuffleString(word), players: [] };
+export const createRoom = (roomCode, socket, id, username, word) => {
+  if (!rooms[roomCode]) {
+    rooms[roomCode] = { code: roomCode, letters: splitAndShuffleString(word), players: [] };
   }
-  joinRoom(room, socket, id, username);
+  joinRoom(roomCode, socket, id, username);
 };
 
-export const joinRoom = (room, socket, id, username) => {
-  if (!rooms[room]) {
+export const joinRoom = (roomCode, socket, id, username) => {
+  if (!rooms[roomCode]) {
     socket.send(
       JSON.stringify({
         error: true,
-        message: `Invalid code: ${room}`,
+        message: `Invalid code: ${roomCode}`,
       })
     );
     return;
   }
-  rooms[room].players.push({ socket, id, username, words: [], score: 0 });
-  broadcastRoomUpdate(room, socket);
-  console.log(`${username} joined room: ${room}`);
+  rooms[roomCode].players.push({ socket, id, username, words: [], score: 0 });
+  broadcastRoomUpdate(roomCode, socket);
+  console.log(`${username} joined room: ${roomCode}`);
 };
 
 export const removeUserFromRooms = (socket) => {
-  for (const room in rooms) {
-    rooms[room].players = rooms[room].players.filter((user) => user.socket === socket);
-    if (rooms[room].players.length === 0) {
-      delete rooms[room];
-    } else {
-      broadcastRoomUpdate(room);
+  for (const roomCode in rooms) {
+    if (rooms[roomCode].players.map((player) => player.socket).includes(socket)) {
+      console.log(`removing player ${socket} from room ${roomCode}`);
+      const updatedRoom = rooms[roomCode].players.filter((player) => player.socket !== socket);
+      rooms[roomCode].players = updatedRoom;
+      if (rooms[roomCode].players.length === 0) {
+        console.log(`deleting room ${roomCode} as no players in it`);
+        delete rooms[roomCode];
+      } else {
+        console.log(`sending update to ${roomCode} to nofify of new room size`);
+        broadcastRoomUpdate(roomCode);
+      }
     }
   }
 };
