@@ -25,6 +25,7 @@ const Game = ({ roomData, playerId, wordList }) => {
   };
 
   const handleDelete = () => {
+    if (animating) return;
     setWord('');
     setLetters((prev) => prev.map((letter) => ({ ...letter, selected: false })));
   };
@@ -106,7 +107,7 @@ const Game = ({ roomData, playerId, wordList }) => {
         ))}
       </div>
       <div className="buttons">
-        <div className={animating ? "iconWrapper hidden" : "iconWrapper"} onClick={handleDelete}>
+        <div className="iconWrapper" onClick={handleDelete}>
           <BinIcon />
         </div>
       </div>
