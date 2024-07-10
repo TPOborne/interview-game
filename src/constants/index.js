@@ -4,4 +4,6 @@ export const ACTIONS = {
   START: "START",
   UPDATE_ROOM: "UPDATE_ROOM",
   SUBMIT_WORD: "SUBMIT_WORD",
+  PING: "PING",
+  PONG: "PONG"
 };

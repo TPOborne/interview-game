@@ -53,11 +53,14 @@ const View = () => {
 						}
 					}
 					switch (action) {
-						case 'UPDATE_ROOM':
+						case ACTIONS.UPDATE_ROOM:
 							setRoomData((prev) => ({ ...prev, code: roomCode, players, letters }));
 							if (letters && wordList.length) {
 								setPossibleWords(canFormWords(wordList, letters));
 							}
+							break;
+						case ACTIONS.PONG:
+							console.log('received pong from server');
 							break;
 						default:
 							console.warn("Unhandled action from server:", action);

@@ -41,6 +41,7 @@ wss.on("connection", (ws) => {
       console.warn("No data passed in message");
       return;
     }
+
     let parsedMessage = null;
     try {
       parsedMessage = JSON.parse(message);
@@ -66,6 +67,9 @@ wss.on("connection", (ws) => {
         break;
       case ACTIONS.SUBMIT_WORD:
         submitWord(ws, roomCode, word);
+        break;
+      case ACTIONS.PING:
+        ws.send(JSON.stringify({ action: ACTIONS.PONG }))
         break;
       default:
         console.log("Unknown action", action);
