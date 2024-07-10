@@ -168,6 +168,7 @@ input {
       border-radius: .4em;
       padding: 8px;
       color: white;
+      animation: fadeOut 1.5s;
       &::after {
         content: '';
           position: absolute;
@@ -222,7 +223,7 @@ input {
   0% {
     opacity: 1
   }
-  80% {
+  90% {
     opacity: 1
   }
   100% {

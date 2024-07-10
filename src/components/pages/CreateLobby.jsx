@@ -21,7 +21,7 @@ const CreateLobby = ({ playerId }) => {
   return (
     <div className="infoWrapper">
       <div className="info">
-        <h1>Create Lobby</h1>
+        <h1>Host Lobby</h1>
         <article>
           <h2>Player name</h2>
           <input type="text" value={name} onChange={handleInput} />
