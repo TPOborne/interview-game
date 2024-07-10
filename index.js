@@ -3,7 +3,7 @@ import path from "path";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import { ACTIONS } from "./src/constants/index.js";
-import { generateRandomCode } from "./src/utils/serverUtils.js";
+import { generateRandomCode } from "./src/utils/utils.js";
 import {
   createRoom,
   joinRoom,
@@ -52,7 +52,7 @@ wss.on("connection", (ws) => {
 
     switch (action) {
       case ACTIONS.CREATE_ROOM:
-        createRoom(generateRandomCode(), ws, id, username);
+        createRoom(generateRandomCode(), ws, id, username, word);
         break;
       case ACTIONS.JOIN_ROOM:
         if (!roomCode || !username) {

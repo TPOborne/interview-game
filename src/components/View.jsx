@@ -7,16 +7,20 @@ import JoinLobby from './pages/JoinLobby';
 import Lobby from './pages/Lobby';
 import { useWebSocket } from '../contexts/WebSocketContext';
 import { ACTIONS } from '../constants';
+import { shuffleArray } from '../utils/utils';
 
 const View = () => {
 	const ws = useWebSocket();
 	const [playerId, setPlayerId] = useState()
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [roomData, setRoomData] = useState({
+		letters: [],
 		code: 'ABCD',
 		players: [],
 	});
 	const [errorMessage, setErrorMessage] = useState();
+	const [wordList, setWordList] = useState(null);
+	const [chosenWord, setChosenWord] = useState('');
 
 	const handleNext = (event, nextView) => {
 		if (!nextView) {
@@ -39,7 +43,7 @@ const View = () => {
 				if (parsedData.error) {
 					setErrorMessage(parsedData.message);
 				} else {
-					const { action, roomCode, players, goToNextPage } = parsedData;
+					const { action, roomCode, players, letters, goToNextPage } = parsedData;
 					if (goToNextPage) {
 						if (currentIndex === 1) {
 							handleNext(null, 3);
@@ -49,7 +53,7 @@ const View = () => {
 					}
 					switch (action) {
 						case 'UPDATE_ROOM':
-							setRoomData((prev) => ({ ...prev, code: roomCode, players }));
+							setRoomData((prev) => ({ ...prev, code: roomCode, players, letters }));
 							break;
 						default:
 							console.warn("Unhandled action from server:", action);
@@ -84,14 +88,36 @@ const View = () => {
 		if (!playerId) setPlayerId(uuidv4());
 	}, [playerId]);
 
+	useEffect(() => {
+    const loadWordList = async () => {
+      try {
+        const response = await fetch("/csw15.txt");
+        if (!response.ok) {
+          throw new Error("Failed to fetch the file");
+        }
+        const text = await response.text();
+        const arrayOfWords = text.split("\n");
+        const cleanedWords = arrayOfWords.map(word => word.trim()).filter((word) => word.length >= 4 && word.length <= 9);
+        setWordList(cleanedWords);
+				const randomWord = shuffleArray(cleanedWords.filter((word) => word.length === 9))[0];
+				setChosenWord(randomWord);
+      } catch (error) {
+        console.error("Error:", error.message);
+        setWordList(null);
+      }
+    };
+
+    loadWordList();
+  }, []);
+
 	return (
 		<main>
 			<div className="contents">
 				{currentIndex === 0 && <Home nextHandler={handleNext} />}
-				{currentIndex === 1 && <CreateLobby playerId={playerId} />}
+				{currentIndex === 1 && <CreateLobby playerId={playerId} chosenWord={chosenWord} />}
 				{currentIndex === 2 && <JoinLobby playerId={playerId} />}
 				{currentIndex === 3 && <Lobby startHandler={handleStart} roomData={roomData} />}
-				{currentIndex === 4 && <Game roomData={roomData} playerId={playerId} />}
+				{currentIndex === 4 && <Game roomData={roomData} playerId={playerId} wordList={wordList} />}
 			</div>
 			{errorMessage && (
 				<div className="errorPopup">

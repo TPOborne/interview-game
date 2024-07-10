@@ -1,4 +1,5 @@
 import { ACTIONS } from "../src/constants/index.js";
+import { splitAndShuffleString } from '../src/utils/utils.js';
 
 const rooms = {};
 
@@ -11,9 +12,9 @@ const getRoom = (roomCode) => {
   return room;
 };
 
-export const createRoom = (room, socket, id, username) => {
+export const createRoom = (room, socket, id, username, word) => {
   if (!rooms[room]) {
-    rooms[room] = [];
+    rooms[room] = { letters: splitAndShuffleString(word), players: [] };
   }
   joinRoom(room, socket, id, username);
 };
@@ -28,15 +29,15 @@ export const joinRoom = (room, socket, id, username) => {
     );
     return;
   }
-  rooms[room].push({ socket, id, username, words: [], score: 0 });
+  rooms[room].players.push({ socket, id, username, words: [], score: 0 });
   broadcastRoomUpdate(room, socket);
   console.log(`${username} joined room: ${room}`);
 };
 
 export const removeUserFromRooms = (socket) => {
   for (const room in rooms) {
-    rooms[room] = rooms[room].filter((user) => user.socket !== socket);
-    if (rooms[room].length === 0) {
+    rooms[room].players = rooms[room].players.filter((user) => user.socket !== socket);
+    if (rooms[room].players.length === 0) {
       delete rooms[room];
     } else {
       broadcastRoomUpdate(room);
@@ -48,7 +49,7 @@ export const displayRooms = () => {
   const roomData = Object.keys(rooms).map((room) => {
     return {
       room,
-      users: rooms[room].map((user) => user.username).join(", "),
+      users: rooms[room].players.map((user) => user.username).join(", "),
     };
   });
   console.table(roomData);
@@ -57,7 +58,7 @@ export const displayRooms = () => {
 export const submitWord = (socket, roomCode, word) => {
   const room = getRoom(roomCode);
   if (!room) return;
-  const player = room.find((player) => player.socket === socket);
+  const player = room.players.find((player) => player.socket === socket);
   if (!player) {
     console.error(`player does not exist in room ${roomCode}`);
     return;
@@ -76,15 +77,16 @@ export const startGame = (roomCode) => {
   broadcastRoomUpdate(roomCode, null, true);
 };
 
-export const broadcastRoomUpdate = (room, currentSocket, progressAll) => {
-  const sockets = rooms[room];
-  if (sockets) {
-    sockets.forEach(({ socket }) => {
+export const broadcastRoomUpdate = (roomCode, currentSocket, progressAll) => {
+  const room = rooms[roomCode];
+  if (room) {
+    room.players.forEach(({ socket }) => {
       socket.send(
         JSON.stringify({
           action: ACTIONS.UPDATE_ROOM,
-          roomCode: room,
-          players: rooms[room].map(({ id, username, words, score }) => ({
+          roomCode: roomCode,
+          letters: room.letters,
+          players: room.players.map(({ id, username, words, score }) => ({
             id,
             name: username,
             words,

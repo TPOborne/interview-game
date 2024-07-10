@@ -3,13 +3,12 @@ import BinIcon from '../../assets/icons/bin.svg?react';
 import { useWebSocket } from '../../contexts/WebSocketContext';
 import { ACTIONS } from '../../constants';
 
-const Game = ({ roomData, playerId }) => {
-  const [letters, setLetters] = useState(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'].map((letter, index) => ({
+const Game = ({ roomData, playerId, wordList }) => {
+  const [letters, setLetters] = useState(roomData.letters.map((letter, index) => ({
     id: index + 1,
     value: letter,
     selected: false
   })));
-  const [wordList, setWordList] = useState(null);
   const [word, setWord] = useState('');
   const ws = useWebSocket();
   const [animating, setAnimating] = useState(false);
@@ -54,26 +53,6 @@ const Game = ({ roomData, playerId }) => {
     }, 1500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [word, checkWordValid, ws, roomData.code, letters]);
-
-  useEffect(() => {
-    const loadWordList = async () => {
-      try {
-        const response = await fetch("/csw15.txt");
-        if (!response.ok) {
-          throw new Error("Failed to fetch the file");
-        }
-        const text = await response.text();
-        const arrayOfWords = text.split("\n");
-        const cleanedWords = arrayOfWords.map(word => word.trim()).filter((word) => word.length >= 4 && word.length <= 9);
-        setWordList(cleanedWords);
-      } catch (error) {
-        console.error("Error:", error.message);
-        setWordList(null);
-      }
-    };
-
-    loadWordList();
-  }, []);
 
   useEffect(() => {
     const previous = prevRoomData.current;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useWebSocket } from '../../contexts/WebSocketContext';
 import { ACTIONS } from '../../constants';
 
-const CreateLobby = ({ playerId }) => {
+const CreateLobby = ({ playerId, chosenWord }) => {
   const ws = useWebSocket();
   const [name, setName] = useState('');
 
@@ -14,7 +14,7 @@ const CreateLobby = ({ playerId }) => {
   const handleCreate = () => {
     if (!name.length) return;
     ws.current.send(
-      JSON.stringify({ action: ACTIONS.CREATE_ROOM, id: playerId, username: name })
+      JSON.stringify({ action: ACTIONS.CREATE_ROOM, id: playerId, username: name, word: chosenWord })
     );
   }
 
