@@ -9,7 +9,6 @@ const App = () => {
     <WebSocketProvider>
       <Header />
       <View />
-      <Footer />
     </WebSocketProvider>
   );
 };
