@@ -57,6 +57,10 @@ const canFormWords = (words, letters) => {
       return false;
     }
 
+    if (word.length < 4 || word.length > 9) {
+      return false;
+    }
+
     // Check if the word can be formed with the available letters
     for (let letter in wordFreq) {
       if (wordFreq[letter] > (freq[letter] || 0)) {
