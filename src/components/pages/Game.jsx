@@ -100,7 +100,7 @@ const Game = ({ roomData, playerId, wordList }) => {
       </p>
       <div className="grid">
         {letters.map((letter) => (
-          <div key={letter.id} className={`tile ${!letter.selected ? null : (animating ? 'correct' : (wordTaken ? 'wrong' : 'selected'))}`} onClick={() => handleClick(letter)}>
+          <div key={letter.id} className={`tile ${!letter.selected ? null : (animating ? 'correct' : 'selected')}`} onClick={() => handleClick(letter)}>
             {letter.value}
           </div>
         ))}
