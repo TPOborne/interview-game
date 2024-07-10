@@ -36,7 +36,7 @@ export const joinRoom = (room, socket, id, username) => {
 
 export const removeUserFromRooms = (socket) => {
   for (const room in rooms) {
-    rooms[room].players = rooms[room].players.filter((user) => user.socket !== socket);
+    rooms[room].players = rooms[room].players.filter((user) => user.socket === socket);
     if (rooms[room].players.length === 0) {
       delete rooms[room];
     } else {
