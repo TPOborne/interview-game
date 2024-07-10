@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <footer>
-      Hello
+      &copy;TPO
     </footer>
   )
 };

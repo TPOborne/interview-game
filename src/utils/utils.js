@@ -1,5 +1,5 @@
 const generateRandomCode = () => {
-  const characters = "ABCDEFGHIJKLMNOPQRSTU";
+  const characters = "ABCDEFGHIJKLMNOPRSTU";
   const randomChar = () =>
     characters[Math.floor(Math.random() * characters.length)];
   return randomChar() + randomChar() + randomChar() + randomChar();
@@ -33,5 +33,43 @@ const splitAndShuffleString = (str) => {
   return shuffledArray;
 };
 
+const canFormWords = (words, letters) => {
+  // Helper function to count the frequency of each letter in an array
+  const letterCount = (arr) => {
+    return arr.reduce((count, letter) => {
+      count[letter] = (count[letter] || 0) + 1;
+      return count;
+    }, {});
+  };
+
+  // Count the frequency of letters in the letters array
+  const lettersFreq = letterCount(letters);
+
+  // Get the 5th letter from the letters array
+  const mandatoryLetter = letters[4];
+
+  // Function to check if a word can be formed using the available letters
+  const canFormWord = (word, freq) => {
+    const wordFreq = letterCount(word.split(''));
+
+    // Check if the word contains the mandatory letter
+    if (!word.includes(mandatoryLetter)) {
+      return false;
+    }
+
+    // Check if the word can be formed with the available letters
+    for (let letter in wordFreq) {
+      if (wordFreq[letter] > (freq[letter] || 0)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  // Filter the words array to include only the words that can be formed
+  return words.filter(word => canFormWord(word, lettersFreq));
+};
+
+
 // Export the function
-export { generateRandomCode, splitAndShuffleString, shuffleArray };
+export { generateRandomCode, splitAndShuffleString, shuffleArray, canFormWords };

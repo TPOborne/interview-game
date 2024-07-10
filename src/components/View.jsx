@@ -7,7 +7,7 @@ import JoinLobby from './pages/JoinLobby';
 import Lobby from './pages/Lobby';
 import { useWebSocket } from '../contexts/WebSocketContext';
 import { ACTIONS } from '../constants';
-import { shuffleArray } from '../utils/utils';
+import { shuffleArray, canFormWords } from '../utils/utils';
 
 const View = () => {
 	const ws = useWebSocket();
@@ -21,6 +21,7 @@ const View = () => {
 	const [errorMessage, setErrorMessage] = useState();
 	const [wordList, setWordList] = useState(null);
 	const [chosenWord, setChosenWord] = useState('');
+	const [possibleWords, setPossibleWords] = useState([]);
 
 	const handleNext = (event, nextView) => {
 		if (!nextView) {
@@ -54,6 +55,9 @@ const View = () => {
 					switch (action) {
 						case 'UPDATE_ROOM':
 							setRoomData((prev) => ({ ...prev, code: roomCode, players, letters }));
+							if (letters && wordList.length) {
+								setPossibleWords(canFormWords(wordList, letters));
+							}
 							break;
 						default:
 							console.warn("Unhandled action from server:", action);
@@ -117,7 +121,7 @@ const View = () => {
 				{currentIndex === 1 && <CreateLobby playerId={playerId} chosenWord={chosenWord} />}
 				{currentIndex === 2 && <JoinLobby playerId={playerId} />}
 				{currentIndex === 3 && <Lobby startHandler={handleStart} roomData={roomData} />}
-				{currentIndex === 4 && <Game roomData={roomData} playerId={playerId} wordList={wordList} />}
+				{currentIndex === 4 && <Game roomData={roomData} playerId={playerId} wordList={wordList} possibleWords={possibleWords} />}
 			</div>
 			{errorMessage && (
 				<div className="errorPopup">

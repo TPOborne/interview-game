@@ -37,7 +37,7 @@ export const joinRoom = (roomCode, socket, id, username) => {
 export const removeUserFromRooms = (socket) => {
   for (const roomCode in rooms) {
     if (rooms[roomCode].players.map((player) => player.socket).includes(socket)) {
-      console.log(`removing player ${socket} from room ${roomCode}`);
+      console.log(`removing player from room ${roomCode}`);
       const updatedRoom = rooms[roomCode].players.filter((player) => player.socket !== socket);
       rooms[roomCode].players = updatedRoom;
       if (rooms[roomCode].players.length === 0) {

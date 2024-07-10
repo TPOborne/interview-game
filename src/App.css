@@ -219,6 +219,10 @@ input {
   visibility: hidden;
 }
 
+.wordTaken {
+  margin-bottom: 10px;
+}
+
 @keyframes fadeOut {
   0% {
     opacity: 1

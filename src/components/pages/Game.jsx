@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import BinIcon from '../../assets/icons/bin.svg?react';
 import { useWebSocket } from '../../contexts/WebSocketContext';
 import { ACTIONS } from '../../constants';
 
-const Game = ({ roomData, playerId, wordList }) => {
+const Game = ({ roomData, playerId, wordList, possibleWords }) => {
   const [letters, setLetters] = useState(roomData.letters.map((letter, index) => ({
     id: index + 1,
     value: letter,
@@ -80,6 +80,14 @@ const Game = ({ roomData, playerId, wordList }) => {
     prevRoomData.current = roomData;
   }, [roomData]);
 
+  const foundWords = useMemo(() => {
+    if (!roomData?.players?.length) return 0;
+    const foundWords = roomData.players.reduce((total, player) => {
+      return total + player.words.length;
+    }, 0);
+    return foundWords;
+  }, [roomData.players]);
+
   return (
     <div className="game">
       <div className="playerScoresWrapper">
@@ -94,11 +102,12 @@ const Game = ({ roomData, playerId, wordList }) => {
         ))}
       </div>
       <h1 className={animating ? 'textCorrect' : null}>{word}</h1>
-      <p className={!wordTaken ? "hidden" : "textWrong"}>
+      <p className={!wordTaken ? "hidden wordTaken" : "textWrong wordTaken"}>
         {wordTaken ? (
           wordTaken.id === playerId ? 'You have this word' : `${wordTaken.name} has this word`
         ) : 'word taken'}
       </p>
+      <h6>{possibleWords.length - foundWords} words left</h6>
       <div className="grid">
         {letters.map((letter) => (
           <div key={letter.id} className={`tile ${!letter.selected ? null : (animating ? 'correct' : 'selected')}`} onClick={() => handleClick(letter)}>
