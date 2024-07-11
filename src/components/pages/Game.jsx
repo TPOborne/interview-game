@@ -20,9 +20,9 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
 
   const handleClick = (selectedLetter) => {
     if (animating) return;
-    setLetters((prev) => (prev.map((letter) => letter.id === selectedLetter.id ? { ...selectedLetter, selected: true } : letter)));
-    setLastLetterIds((prev) => [...prev, selectedLetter.id]);
     if (!selectedLetter.selected) {
+      setLetters((prev) => (prev.map((letter) => letter.id === selectedLetter.id ? { ...selectedLetter, selected: true } : letter)));
+      setLastLetterIds((prev) => [...prev, selectedLetter.id]);
       setWord((prev) => prev.concat(selectedLetter.value));
     }
   };
