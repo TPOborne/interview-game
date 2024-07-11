@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const Lobby = ({ startHandler, roomData }) => {
+const Lobby = ({ startHandler, roomData, playerId }) => {
   const { code, players } = roomData;
   const [disabled, setDisabled] = useState(false);
 
@@ -20,7 +20,9 @@ const Lobby = ({ startHandler, roomData }) => {
           </ul>
         </article>
         <div className="buttonsWrapper">
-          <button onClick={handleStart} disabled={disabled}>Start</button>
+          {playerId === roomData.players[0].id ? (
+            <button onClick={handleStart} disabled={disabled}>Start</button>
+          ): <p>Waiting for host to start game</p>}
         </div>
       </div>
     </div >

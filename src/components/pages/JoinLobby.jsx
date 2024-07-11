@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useWebSocket } from '../../contexts/WebSocketContext';
 import { ACTIONS } from '../../constants';
 
-const JoinLobby = ({ playerId }) => {
+const JoinLobby = ({ playerId, backHandler }) => {
   const ws = useWebSocket();
   const [name, setName] = useState('');
   const [code, setCode] = useState('');
@@ -22,7 +22,11 @@ const JoinLobby = ({ playerId }) => {
     ws.current.send(
       JSON.stringify({ action: ACTIONS.JOIN_ROOM, id: playerId, username: name, roomCode: code })
     );
-  }
+  };
+
+  const handleBack = (event) => {
+    backHandler(event, 2);
+  };
 
   return (
     <div className="infoWrapper">
@@ -40,6 +44,7 @@ const JoinLobby = ({ playerId }) => {
         </div>
         <div className="buttonsWrapper">
           <button onClick={handleJoin}>Join</button>
+          <button onClick={(e) => handleBack(e)}>Back</button>
         </div>
       </div>
     </div >

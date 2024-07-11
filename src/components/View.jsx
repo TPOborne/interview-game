@@ -37,6 +37,13 @@ const View = () => {
 		);
 	};
 
+	const handleBack = (event, numberBack) => {
+		if (currentIndex > 0) {
+			const newIndex = currentIndex - (numberBack ? numberBack : 1);
+			setCurrentIndex(newIndex);
+		}
+	};
+
 	useEffect(() => {
 		const handleWebSocketMessage = (event) => {
 			try {
@@ -121,9 +128,9 @@ const View = () => {
 		<main>
 			<div className="contents">
 				{currentIndex === 0 && <Home nextHandler={handleNext} />}
-				{currentIndex === 1 && <CreateLobby playerId={playerId} chosenWord={chosenWord} />}
-				{currentIndex === 2 && <JoinLobby playerId={playerId} />}
-				{currentIndex === 3 && <Lobby startHandler={handleStart} roomData={roomData} />}
+				{currentIndex === 1 && <CreateLobby playerId={playerId} chosenWord={chosenWord} backHandler={handleBack} />}
+				{currentIndex === 2 && <JoinLobby playerId={playerId} backHandler={handleBack} />}
+				{currentIndex === 3 && <Lobby startHandler={handleStart} roomData={roomData} playerId={playerId} />}
 				{currentIndex === 4 && <Game roomData={roomData} playerId={playerId} wordList={wordList} possibleWords={possibleWords} />}
 			</div>
 			{errorMessage && (

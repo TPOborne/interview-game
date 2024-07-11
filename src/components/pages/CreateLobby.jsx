@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useWebSocket } from '../../contexts/WebSocketContext';
 import { ACTIONS } from '../../constants';
 
-const CreateLobby = ({ playerId, chosenWord }) => {
+const CreateLobby = ({ playerId, chosenWord, backHandler }) => {
   const ws = useWebSocket();
   const [name, setName] = useState('');
 
@@ -18,6 +18,10 @@ const CreateLobby = ({ playerId, chosenWord }) => {
     );
   }
 
+  const handleBack = () => {
+    backHandler();
+  }
+
   return (
     <div className="infoWrapper">
       <div className="info">
@@ -28,6 +32,7 @@ const CreateLobby = ({ playerId, chosenWord }) => {
         </article>
         <div className="buttonsWrapper">
           <button onClick={handleCreate} disabled={name.length < 2}>Create</button>
+          <button onClick={handleBack}>Back</button>
         </div>
       </div>
     </div >
