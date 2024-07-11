@@ -17,6 +17,13 @@ header {
   width: 100%;
   border-bottom: 2px solid #333;
   padding: 10px 0;
+  display: flex;
+  h3 {
+    flex-grow: 1;
+  }
+  &.iconWrapper {
+    padding-right: 10px;
+  }
 }
 
 main {
@@ -138,6 +145,11 @@ button {
   border-radius: 50%;
   cursor: pointer;
   margin-top: 10px;
+  &.small {
+    margin-top: 0;
+    max-height: 30px;
+    max-width: 30px;
+  }
 }
 
 input {

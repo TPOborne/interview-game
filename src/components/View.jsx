@@ -128,7 +128,7 @@ const View = () => {
     const loadWordList = async () => {
       try {
 				let file = null;
-				if (language === 'ENGLISH') file = "/english3.txt";
+				if (language === 'ENGLISH') file = "/italiano.txt";
 				if (language === 'ITALIAN') file = "/italiano.txt";
 				if (!file) throw new Error('No language specified');
         const response = await fetch(file);

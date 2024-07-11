@@ -1,7 +1,12 @@
+import LanguageIcon from '../assets/icons/language.svg?react';
+
 const Header = () => {
   return (
     <header>
-      Word Race
+      <h3>Word Race</h3>
+      <div className="iconWrapper small">
+        <LanguageIcon />
+      </div>
     </header>
   )
 };
