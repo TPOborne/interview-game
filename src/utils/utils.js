@@ -74,6 +74,5 @@ const canFormWords = (words, letters) => {
   return words.filter(word => canFormWord(word, lettersFreq));
 };
 
-
 // Export the function
 export { generateRandomCode, splitAndShuffleString, shuffleArray, canFormWords };
