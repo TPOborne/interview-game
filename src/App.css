@@ -169,6 +169,14 @@ input {
       padding: 8px;
       color: white;
       animation: fadeOut 1.5s;
+      text-wrap: nowrap;
+      &.giveUp {
+        background: #ff5d5d;
+        animation: none;
+        &::after {
+          border-top-color: #ff5d5d;
+        }
+      }
       &::after {
         content: '';
           position: absolute;
@@ -183,6 +191,22 @@ input {
           margin-bottom: -9px;
       }
     }
+  }
+}
+
+.gameOver {
+  article {
+    padding: 20px 0;
+  }
+  padding-bottom: 20px;
+  .playerWords {
+    padding-top: 20px;
+    .grid {
+      padding-top: 10px;
+    }
+  }
+  .grid {
+    padding: 20px;
   }
 }
 
@@ -223,6 +247,16 @@ input {
   margin-bottom: 10px;
 }
 
+.fadeOut {
+  animation: fadeOutSlow 1.5s;
+  opacity: 0;
+}
+
+.fadeIn {
+  animation: fadeIn 1.5s;
+  opacity: 1;
+}
+
 @keyframes fadeOut {
   0% {
     opacity: 1
@@ -232,6 +266,27 @@ input {
   }
   100% {
     opacity: 0
+  }
+}
+
+@keyframes fadeOutSlow {
+  0% {
+    opacity: 1
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0
+  }
+  100% {
+    opacity: 1
   }
 }
 

@@ -11,6 +11,8 @@ import {
   displayRooms,
   submitWord,
   startGame,
+  giveUp,
+  restartGame
 } from "./server/roomManager.js";
 
 const app = express();
@@ -53,7 +55,7 @@ wss.on("connection", (ws) => {
 
     switch (action) {
       case ACTIONS.CREATE_ROOM:
-        createRoom(generateRandomCode(), ws, id, username, word);
+        createRoom(generateRandomCode(), ws, id, username);
         break;
       case ACTIONS.JOIN_ROOM:
         if (!roomCode || !username) {
@@ -63,10 +65,16 @@ wss.on("connection", (ws) => {
         joinRoom(roomCode, ws, id, username);
         break;
       case ACTIONS.START:
-        startGame(roomCode);
+        startGame(roomCode, word);
         break;
       case ACTIONS.SUBMIT_WORD:
         submitWord(ws, roomCode, word);
+        break;
+      case ACTIONS.GIVE_UP:
+        giveUp(ws, roomCode);
+        break;
+      case ACTIONS.RESTART:
+        restartGame(roomCode);
         break;
       case ACTIONS.PING:
         ws.send(JSON.stringify({ action: ACTIONS.PONG }))

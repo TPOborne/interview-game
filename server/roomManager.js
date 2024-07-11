@@ -12,9 +12,9 @@ const getRoom = (roomCode) => {
   return room;
 };
 
-export const createRoom = (roomCode, socket, id, username, word) => {
+export const createRoom = (roomCode, socket, id, username) => {
   if (!rooms[roomCode]) {
-    rooms[roomCode] = { code: roomCode, letters: splitAndShuffleString(word), players: [] };
+    rooms[roomCode] = { code: roomCode, players: [] };
   }
   joinRoom(roomCode, socket, id, username);
 };
@@ -29,7 +29,7 @@ export const joinRoom = (roomCode, socket, id, username) => {
     );
     return;
   }
-  rooms[roomCode].players.push({ socket, id, username, words: [], score: 0 });
+  rooms[roomCode].players.push({ socket, id, username, words: [], score: 0, giveUp: false });
   broadcastRoomUpdate(roomCode, socket);
   console.log(`${username} joined room: ${roomCode}`);
 };
@@ -77,28 +77,47 @@ export const submitWord = (socket, roomCode, word) => {
   broadcastRoomUpdate(roomCode);
 };
 
-export const startGame = (roomCode) => {
+export const startGame = (roomCode, word) => {
   const room = getRoom(roomCode);
   if (!room) return;
+  room.letters = splitAndShuffleString(word)
   broadcastRoomUpdate(roomCode, null, true);
 };
 
-export const broadcastRoomUpdate = (roomCode, currentSocket, progressAll) => {
+export const restartGame = (roomCode) => {
+  const room = getRoom(roomCode);
+  if (!room) return;
+  room.givenUp = false;
+  room.players = room.players.map((player) => ({ ...player, words: [], score: 0, giveUp: false }));
+  broadcastRoomUpdate(roomCode, null, true, true);
+};
+
+export const giveUp = (ws, roomCode) => {
+  const room = getRoom(roomCode);
+  if (!room) return;
+  room.players = room.players.map((player) => player.socket === ws ? { ...player, giveUp: !player.giveUp } : player);
+  room.givenUp = room.players.every((player) => player.giveUp);
+  broadcastRoomUpdate(roomCode);
+};
+
+export const broadcastRoomUpdate = (roomCode, currentSocket, progressAll, restart) => {
   const room = rooms[roomCode];
   if (room) {
     room.players.forEach(({ socket }) => {
       socket.send(
         JSON.stringify({
-          action: ACTIONS.UPDATE_ROOM,
+          action: restart ? ACTIONS.RESTART : ACTIONS.UPDATE_ROOM,
           roomCode: roomCode,
           letters: room.letters,
-          players: room.players.map(({ id, username, words, score }) => ({
+          players: room.players.map(({ id, username, words, score, giveUp }) => ({
             id,
             name: username,
             words,
             score,
+            giveUp
           })),
           goToNextPage: progressAll || currentSocket === socket,
+          givenUp: room.givenUp
         })
       );
     });

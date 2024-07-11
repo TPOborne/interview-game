@@ -22,7 +22,7 @@ const Lobby = ({ startHandler, roomData, playerId }) => {
         <div className="buttonsWrapper">
           {playerId === roomData.players[0].id ? (
             <button onClick={handleStart} disabled={disabled}>Start</button>
-          ): <p>Waiting for host to start game</p>}
+          ) : <p>Waiting for host to start game</p>}
         </div>
       </div>
     </div >

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import FlagIcon from '../../assets/icons/flag.svg?react';
 import BinIcon from '../../assets/icons/bin.svg?react';
 import UndoIcon from '../../assets/icons/undo.svg?react';
 import { useWebSocket } from '../../contexts/WebSocketContext';
@@ -18,8 +19,12 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
   const [lastLetterIds, setLastLetterIds] = useState([]);
   const prevRoomData = useRef();
 
+  const disabledActions = useMemo(() => {
+    return (animating || roomData.givenUp);
+  }, [animating, roomData.givenUp]);
+
   const handleClick = (selectedLetter) => {
-    if (animating) return;
+    if (disabledActions) return;
     if (!selectedLetter.selected) {
       setLetters((prev) => (prev.map((letter) => letter.id === selectedLetter.id ? { ...selectedLetter, selected: true } : letter)));
       setLastLetterIds((prev) => [...prev, selectedLetter.id]);
@@ -27,15 +32,23 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
     }
   };
 
+  const handleGiveUp = () => {
+    if (disabledActions) return;
+    handleDelete();
+    ws.current.send(
+      JSON.stringify({ action: ACTIONS.GIVE_UP, roomCode: roomData.code })
+    );
+  };
+
   const handleDelete = () => {
-    if (animating) return;
+    if (disabledActions) return;
     setWord('');
     setLetters((prev) => prev.map((letter) => ({ ...letter, selected: false })));
     setLastLetterIds([]);
   };
 
   const handleUndo = () => {
-    if (animating || word.length === 0 || !lastLetterIds.length) return;
+    if (disabledActions || word.length === 0 || !lastLetterIds.length) return;
     setWord((prevWord) => prevWord.substring(0, prevWord.length - 1));
     setLetters((prevLetters) => prevLetters.map((letter) => letter.id === lastLetterIds[lastLetterIds.length - 1] ? { ...letter, selected: false } : letter));
     setLastLetterIds((prevIds) => prevIds.slice(0, prevIds.length -1));
@@ -100,7 +113,7 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
   }, [roomData.players]);
 
   return (
-    <div className="game">
+    <div className={`game ${roomData.givenUp ? 'fadeOut' : ''}`}>
       <div className="playerScoresWrapper">
         {roomData.players.map((player, index) => (
           <div className="playerScore" key={index}>
@@ -108,6 +121,9 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
             <h2>{player.score}</h2>
             {latestWords[player.id] && (
               <h6>{latestWords[player.id]}</h6>
+            )}
+            {player.giveUp && (
+              <h6 className="giveUp">I give up!</h6>
             )}
           </div>
         ))}
@@ -127,6 +143,9 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
         ))}
       </div>
       <div className="buttons">
+        <div className="iconWrapper" onClick={handleGiveUp}>
+          <FlagIcon />
+        </div>
         <div className="iconWrapper" onClick={handleDelete}>
           <BinIcon />
         </div>

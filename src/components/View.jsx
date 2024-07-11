@@ -5,12 +5,15 @@ import Game from './pages/Game';
 import CreateLobby from './pages/CreateLobby';
 import JoinLobby from './pages/JoinLobby';
 import Lobby from './pages/Lobby';
+import End from './pages/End';
 import { useWebSocket } from '../contexts/WebSocketContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { ACTIONS } from '../constants';
 import { shuffleArray, canFormWords } from '../utils/utils';
 
 const View = () => {
 	const ws = useWebSocket();
+	const { language } = useLanguage();
 	const [playerId, setPlayerId] = useState()
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [roomData, setRoomData] = useState({
@@ -24,7 +27,7 @@ const View = () => {
 	const [possibleWords, setPossibleWords] = useState([]);
 
 	const handleNext = (event, nextView) => {
-		if (!nextView) {
+		if (nextView === null || nextView === undefined) {
 			setCurrentIndex((prev) => prev + 1);
 		} else {
 			setCurrentIndex(nextView);
@@ -33,7 +36,13 @@ const View = () => {
 
 	const handleStart = () => {
 		ws.current.send(
-			JSON.stringify({ action: ACTIONS.START, roomCode: roomData.code })
+			JSON.stringify({ action: ACTIONS.START, roomCode: roomData.code, word: chosenWord })
+		);
+	};
+
+	const handleRestart = () => {
+		ws.current.send(
+			JSON.stringify({ action: ACTIONS.RESTART, roomCode: roomData.code })
 		);
 	};
 
@@ -51,7 +60,7 @@ const View = () => {
 				if (parsedData.error) {
 					setErrorMessage(parsedData.message);
 				} else {
-					const { action, roomCode, players, letters, goToNextPage } = parsedData;
+					const { action, roomCode, players, letters, goToNextPage, givenUp } = parsedData;
 					if (goToNextPage) {
 						if (currentIndex === 1) {
 							handleNext(null, 3);
@@ -61,11 +70,16 @@ const View = () => {
 					}
 					switch (action) {
 						case ACTIONS.UPDATE_ROOM:
-							setRoomData((prev) => ({ ...prev, code: roomCode, players, letters }));
+							setRoomData((prev) => ({ ...prev, code: roomCode, players, letters, givenUp }));
 							if (letters && wordList.length) {
 								setPossibleWords(canFormWords(wordList, letters));
 							}
 							break;
+						case ACTIONS.RESTART:
+							setRoomData((prev) => ({ ...prev, code: roomCode, players, letters, givenUp }));
+							const randomWord = shuffleArray(wordList.filter((word) => word.length === 9))[0];
+							setChosenWord(randomWord);
+							handleNext(null, 3);
 						case ACTIONS.PONG:
 							console.log('received pong from server');
 							break;
@@ -103,9 +117,21 @@ const View = () => {
 	}, [playerId]);
 
 	useEffect(() => {
+    if (roomData.givenUp) {
+      setTimeout(() => {
+        handleNext();
+      }, 1500);
+    }
+  }, [roomData.givenUp])
+
+	useEffect(() => {
     const loadWordList = async () => {
       try {
-        const response = await fetch("/csw15.txt");
+				let file = null;
+				if (language === 'ENGLISH') file = "/english3.txt";
+				if (language === 'ITALIAN') file = "/italiano.txt";
+				if (!file) throw new Error('No language specified');
+        const response = await fetch(file);
         if (!response.ok) {
           throw new Error("Failed to fetch the file");
         }
@@ -122,7 +148,7 @@ const View = () => {
     };
 
     loadWordList();
-  }, []);
+  }, [language]);
 
 	return (
 		<main>
@@ -132,6 +158,7 @@ const View = () => {
 				{currentIndex === 2 && <JoinLobby playerId={playerId} backHandler={handleBack} />}
 				{currentIndex === 3 && <Lobby startHandler={handleStart} roomData={roomData} playerId={playerId} />}
 				{currentIndex === 4 && <Game roomData={roomData} playerId={playerId} wordList={wordList} possibleWords={possibleWords} />}
+				{currentIndex === 5 && <End restartHandler={handleRestart} playerId={playerId} roomData={roomData} possibleWords={possibleWords} />}
 			</div>
 			{errorMessage && (
 				<div className="errorPopup">
