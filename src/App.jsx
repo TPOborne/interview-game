@@ -1,16 +1,14 @@
 import './App.css';
-import Header from './components/Header';
-import View from './components/View';
 import { WebSocketProvider } from './contexts/WebSocketContext';
-import { LanguageProvider } from './contexts/LanguageContext';
+import { LocaleProvider } from './contexts/LocaleContext';
+import Content from './Content';
 
 const App = () => {
   return (
     <WebSocketProvider>
-      <LanguageProvider>
-        <Header />
-        <View />
-      </LanguageProvider>
+      <LocaleProvider>
+        <Content />
+      </LocaleProvider>
     </WebSocketProvider>
   );
 };

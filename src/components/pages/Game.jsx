@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { FormattedMessage } from "react-intl";
 import FlagIcon from '../../assets/icons/flag.svg?react';
 import BinIcon from '../../assets/icons/bin.svg?react';
 import UndoIcon from '../../assets/icons/undo.svg?react';
@@ -123,7 +124,9 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
               <h6>{latestWords[player.id]}</h6>
             )}
             {player.giveUp && (
-              <h6 className="giveUp">I give up!</h6>
+              <h6 className="giveUp">
+                <FormattedMessage id="GIVE_UP" />
+              </h6>
             )}
           </div>
         ))}
@@ -131,10 +134,16 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
       <h1 className={animating ? 'textCorrect' : null}>{word}</h1>
       <p className={!wordTaken ? "hidden wordTaken" : "textWrong wordTaken"}>
         {wordTaken ? (
-          wordTaken.id === playerId ? 'You have this word' : `${wordTaken.name} has this word`
-        ) : 'word taken'}
+          wordTaken.id === playerId ? (
+            <FormattedMessage id="YOU_HAVE_WORD" />
+          ) : (
+            <FormattedMessage id="THEY_HAVE_WORD" values={{ value: wordTaken.name }} />
+          )
+        ) : 'blank'}
       </p>
-      <h6>{possibleWords.length - foundWords} words left</h6>
+      <h6>
+        <FormattedMessage id="WORDS_LEFT" values={{ value: possibleWords.length - foundWords }} />
+      </h6>
       <div className="grid">
         {letters.map((letter) => (
           <div key={letter.id} className={`tile ${!letter.selected ? null : (animating ? 'correct' : 'selected')}`} onClick={() => handleClick(letter)}>

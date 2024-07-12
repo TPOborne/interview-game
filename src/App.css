@@ -4,7 +4,7 @@ html, body, #root {
   text-align: center;
   overscroll-behavior: none;
   -webkit-tap-highlight-color: transparent;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 #root {
@@ -99,6 +99,7 @@ footer {
 
 ul {
   text-align: left;
+  max-width: 200px;
   margin-left: 20px;
   li {
     margin-bottom: 5px;

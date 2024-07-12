@@ -7,13 +7,11 @@ import JoinLobby from './pages/JoinLobby';
 import Lobby from './pages/Lobby';
 import End from './pages/End';
 import { useWebSocket } from '../contexts/WebSocketContext';
-import { useLanguage } from '../contexts/LanguageContext';
 import { ACTIONS } from '../constants';
 import { shuffleArray, canFormWords } from '../utils/utils';
 
 const View = () => {
 	const ws = useWebSocket();
-	const { language } = useLanguage();
 	const [playerId, setPlayerId] = useState()
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [roomData, setRoomData] = useState({
@@ -127,10 +125,7 @@ const View = () => {
 	useEffect(() => {
     const loadWordList = async () => {
       try {
-				let file = null;
-				if (language === 'ENGLISH') file = "/english3.txt";
-				if (language === 'ITALIAN') file = "/italiano.txt";
-				if (!file) throw new Error('No language specified');
+				let file = "/english3.txt";
         const response = await fetch(file);
         if (!response.ok) {
           throw new Error("Failed to fetch the file");
@@ -148,7 +143,7 @@ const View = () => {
     };
 
     loadWordList();
-  }, [language]);
+  }, []);
 
 	return (
 		<main>

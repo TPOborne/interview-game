@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FormattedMessage } from "react-intl";
 import { useWebSocket } from '../../contexts/WebSocketContext';
 import { ACTIONS } from '../../constants';
 
@@ -31,20 +32,20 @@ const JoinLobby = ({ playerId, backHandler }) => {
   return (
     <div className="infoWrapper">
       <div className="info">
-        <h1>Join Lobby</h1>
+        <h1><FormattedMessage id="JOIN_LOBBY" /></h1>
         <div className="articleWrapper">
           <article>
-            <h2>Player name</h2>
+            <h2><FormattedMessage id="PLAYER_NAME" /></h2>
             <input type="text" value={name} onChange={handleName} maxLength={12} />
           </article>
           <article>
-            <h2>Code</h2>
+            <h2><FormattedMessage id="CODE" /></h2>
             <input type="text" value={code} onChange={handleCode} maxLength={4} />
           </article>
         </div>
         <div className="buttonsWrapper">
-          <button onClick={handleJoin}>Join</button>
-          <button onClick={(e) => handleBack(e)}>Back</button>
+          <button onClick={handleJoin}><FormattedMessage id="JOIN" /></button>
+          <button onClick={(e) => handleBack(e)}><FormattedMessage id="BACK" /></button>
         </div>
       </div>
     </div >

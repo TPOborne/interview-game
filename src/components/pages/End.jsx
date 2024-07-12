@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from "react-intl";
 
 const End = ({ restartHandler, playerId, roomData, possibleWords }) => {
   const handleRestart = () => restartHandler();
@@ -6,9 +7,13 @@ const End = ({ restartHandler, playerId, roomData, possibleWords }) => {
   return (
     <div className="infoWrapper fadeIn">
       <div className="gameOver">
-        <h1>Game Over</h1>
+        <h1>
+          <FormattedMessage id="GAME_OVER" />
+        </h1>
         <article>
-          <h2>Found</h2>
+          <h2>
+            <FormattedMessage id="FOUND" />
+          </h2>
           <div className="playerWords">
             {roomData.players.map((player) => (
               <React.Fragment key={player.id}>
@@ -19,15 +24,23 @@ const End = ({ restartHandler, playerId, roomData, possibleWords }) => {
               </React.Fragment>
             ))}
           </div>
-          <h2>Unfound</h2>
+          <h2>
+            <FormattedMessage id="UNFOUND" />
+          </h2>
           <div className="grid">
             {possibleWords.map((word) => <p key={word}>{word}</p>)}
           </div>
         </article>
         <div className="buttonsWrapper">
           {playerId === roomData.players[0].id ? (
-            <button onClick={handleRestart}>Restart</button>
-          ) : <p>Waiting for host to restart game</p>}
+            <button onClick={handleRestart}>
+              <FormattedMessage id="RESTART" />
+            </button>
+          ) : (
+            <p>
+              <FormattedMessage id="WAITING_FOR_HOST_RESTART" />
+            </p>
+          )}
         </div>
       </div>
     </div >
