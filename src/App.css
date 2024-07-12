@@ -16,15 +16,32 @@ html, body, #root {
 header {
   width: 100%;
   border-bottom: 2px solid #333;
-  padding: 5px;
+  padding: 10px 5px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
+  position: relative;
   p {
     flex-grow: 1;
   }
-  &.iconWrapper {
-    padding-right: 10px;
+  .options {
+    position: absolute;
+    top: 0;
+    right: -80px;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    gap: 10px;
+    margin-right: 10px;
+    transition: right .5s ease-in-out;
+    .flags {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    &.visible {
+      right: 0;
+    }
   }
 }
 
@@ -144,13 +161,15 @@ button {
 .iconWrapper {
   max-width: 40px;
   max-height: 40px;
-  border-radius: 50%;
   cursor: pointer;
   margin-top: 10px;
   &.small {
     margin-top: 0;
     max-height: 30px;
     max-width: 30px;
+  }
+  &.active {
+    border-bottom: 2px solid #333;
   }
 }
 
