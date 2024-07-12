@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormattedMessage } from "react-intl";
 
 const End = ({ restartHandler, playerId, roomData, possibleWords }) => {
   const handleRestart = () => restartHandler();
+
+  const playerWords = useMemo(() => {
+    return roomData.players.map(player => player.words).reduce((acc, words) => acc.concat(words), []);
+  }, [roomData]);
+
+  const unfoundWords = useMemo(() => {
+    return possibleWords.filter(word => !playerWords.includes(word));
+  }, [possibleWords, playerWords]);
+
 
   return (
     <div className="infoWrapper fadeIn">
@@ -28,7 +37,7 @@ const End = ({ restartHandler, playerId, roomData, possibleWords }) => {
             <FormattedMessage id="UNFOUND" />
           </h2>
           <div className="grid">
-            {possibleWords.map((word) => <p key={word}>{word}</p>)}
+            {unfoundWords.map((word) => <p key={word}>{word}</p>)}
           </div>
         </article>
         <div className="buttonsWrapper">
