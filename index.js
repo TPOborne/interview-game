@@ -51,11 +51,11 @@ wss.on("connection", (ws) => {
       console.error("Error parsing message:", error.message);
       return;
     }
-    const { action, id, username, roomCode, word } = parsedMessage;
+    const { action, id, username, roomCode, word, language } = parsedMessage;
 
     switch (action) {
       case ACTIONS.CREATE_ROOM:
-        createRoom(generateRandomCode(), ws, id, username);
+        createRoom(generateRandomCode(), ws, id, username, language);
         break;
       case ACTIONS.JOIN_ROOM:
         if (!roomCode || !username) {

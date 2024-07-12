@@ -39,6 +39,13 @@ header {
       display: flex;
       align-items: center;
       gap: 10px;
+      .iconWrapper {
+        border-bottom: 2px solid transparent;
+        &.active {
+          border-bottom: 2px solid #333;
+        }
+      }
+      
     }
     &.visible {
       right: 0;
@@ -170,9 +177,6 @@ button {
     max-height: 30px;
     max-width: 30px;
   }
-  &.active {
-    border-bottom: 2px solid #333;
-  }
 }
 
 input {
@@ -183,6 +187,24 @@ input {
   font-size: 20px;
   text-align: center;
   width: 60%;
+}
+
+.languageInputs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  .iconWrapper {
+    max-width: 49px;
+    max-height: 39px;
+    display: flex;
+    align-items: center;
+    border: 2px solid transparent;
+    &.active {
+      border: 2px solid #333;
+      border-radius: 10px;
+    }
+  }
 }
 
 .playerScoresWrapper {

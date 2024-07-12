@@ -12,9 +12,9 @@ const getRoom = (roomCode) => {
   return room;
 };
 
-export const createRoom = (roomCode, socket, id, username) => {
+export const createRoom = (roomCode, socket, id, username, language) => {
   if (!rooms[roomCode]) {
-    rooms[roomCode] = { code: roomCode, players: [] };
+    rooms[roomCode] = { code: roomCode, players: [], language };
   }
   joinRoom(roomCode, socket, id, username);
 };
@@ -117,7 +117,8 @@ export const broadcastRoomUpdate = (roomCode, currentSocket, progressAll, restar
             giveUp
           })),
           goToNextPage: progressAll || currentSocket === socket,
-          givenUp: room.givenUp
+          givenUp: room.givenUp,
+          language: room.language
         })
       );
     });

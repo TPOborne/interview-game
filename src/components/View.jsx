@@ -58,7 +58,7 @@ const View = () => {
 				if (parsedData.error) {
 					setErrorMessage(parsedData.message);
 				} else {
-					const { action, roomCode, players, letters, goToNextPage, givenUp } = parsedData;
+					const { action, roomCode, players, letters, goToNextPage, givenUp, language } = parsedData;
 					if (goToNextPage) {
 						if (currentIndex === 1) {
 							handleNext(null, 3);
@@ -68,7 +68,7 @@ const View = () => {
 					}
 					switch (action) {
 						case ACTIONS.UPDATE_ROOM:
-							setRoomData((prev) => ({ ...prev, code: roomCode, players, letters, givenUp }));
+							setRoomData((prev) => ({ ...prev, code: roomCode, players, letters, givenUp, language }));
 							if (letters && wordList.length) {
 								setPossibleWords(canFormWords(wordList, letters));
 							}
@@ -125,6 +125,7 @@ const View = () => {
     const loadWordList = async () => {
       try {
 				let file = "/english3.txt";
+				if (roomData.language === 'ITALIAN') file = '/italiano.txt';
         const response = await fetch(file);
         if (!response.ok) {
           throw new Error("Failed to fetch the file");
@@ -135,6 +136,7 @@ const View = () => {
         setWordList(cleanedWords);
 				const randomWord = shuffleArray(cleanedWords.filter((word) => word.length === 9))[0];
 				setChosenWord(randomWord);
+				console.log('updated wordList and chosenWord because language file changed');
       } catch (error) {
         console.error("Error:", error.message);
         setWordList(null);
@@ -142,7 +144,7 @@ const View = () => {
     };
 
     loadWordList();
-  }, []);
+  }, [roomData.language]);
 
 	return (
 		<main>
