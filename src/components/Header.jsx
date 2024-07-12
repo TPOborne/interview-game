@@ -23,7 +23,7 @@ const Header = () => {
 
   return (
     <header>
-      <p><FormattedMessage id="NAME" /></p>
+      <p className={showFlags ? 'active' : null}><FormattedMessage id="NAME" /></p>
       <div className={`options ${showFlags ? 'visible' : ''}`}>
         <div className="iconWrapper small" onClick={handleClick}>
           <LanguageIcon />

@@ -23,7 +23,14 @@ header {
   align-items: center;
   position: relative;
   p {
+    transition: all .5s ease-in-out;
     flex-grow: 1;
+    padding: 0 10px;
+    @media only screen and (max-width: 600px) {
+      &.active {
+        flex-grow: 0;
+      }
+    }
   }
   .options {
     position: absolute;
