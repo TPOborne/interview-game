@@ -1,12 +1,14 @@
 import LanguageIcon from '../assets/icons/language.svg?react';
+import UKIcon from '../assets/icons/flag-uk.svg?react';
+import ItalyIcon from '../assets/icons/flag-italy.svg?react';
 
 const Header = () => {
   return (
     <header>
-      Word Race
-      {/* <div className="iconWrapper small">
+      <p>Word Race</p>
+      <div className="iconWrapper small">
         <LanguageIcon />
-      </div> */}
+      </div>
     </header>
   )
 };
