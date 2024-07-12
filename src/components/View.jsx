@@ -79,7 +79,6 @@ const View = () => {
 							setChosenWord(randomWord);
 							handleNext(null, 3);
 						case ACTIONS.PONG:
-							console.log('received pong from server');
 							break;
 						default:
 							console.warn("Unhandled action from server:", action);

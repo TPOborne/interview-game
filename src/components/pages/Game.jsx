@@ -20,9 +20,11 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
   const [lastLetterIds, setLastLetterIds] = useState([]);
   const prevRoomData = useRef();
 
-  const disabledActions = useMemo(() => {
-    return (animating || roomData.givenUp);
-  }, [animating, roomData.givenUp]);
+  const disabledActions = useMemo(() => (
+    animating ||
+    roomData.givenUp ||
+    roomData.players.find(player => player.id === playerId)?.giveUp
+  ), [animating, roomData.givenUp, roomData.players]);
 
   const handleClick = (selectedLetter) => {
     if (disabledActions) return;
@@ -34,7 +36,7 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
   };
 
   const handleGiveUp = () => {
-    if (disabledActions) return;
+    if (animating || roomData.givenUp) return;
     handleDelete();
     ws.current.send(
       JSON.stringify({ action: ACTIONS.GIVE_UP, roomCode: roomData.code })
