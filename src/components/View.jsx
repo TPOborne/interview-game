@@ -126,6 +126,7 @@ const View = () => {
       try {
 				let file = "/english3.txt";
 				if (roomData.language === 'ITALIAN') file = '/italiano.txt';
+				if (roomData.language === 'FRENCH') file = '/french.txt';
         const response = await fetch(file);
         if (!response.ok) {
           throw new Error("Failed to fetch the file");
@@ -145,6 +146,12 @@ const View = () => {
 
     loadWordList();
   }, [roomData.language]);
+
+	useEffect(() => {
+		if (roomData.letters && wordList?.length) {
+			setPossibleWords(canFormWords(wordList, roomData.letters));
+		}
+	}, [wordList, roomData.letters]);
 
 	return (
 		<main>

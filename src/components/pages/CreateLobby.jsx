@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FormattedMessage } from "react-intl";
 import UKIcon from '../../assets/icons/flag-uk.svg?react';
 import ItalyIcon from '../../assets/icons/flag-italy.svg?react';
+import FranceIcon from '../../assets/icons/flag-france.svg?react';
 import { useWebSocket } from '../../contexts/WebSocketContext';
 import { ACTIONS } from '../../constants';
 
@@ -43,6 +44,9 @@ const CreateLobby = ({ playerId, backHandler }) => {
             </div>
             <div className={`iconWrapper small ${language === 'ITALIAN' ? 'active' : null}`} onClick={() => handleLanguage('ITALIAN')}>
               <ItalyIcon />
+            </div>
+            <div className={`iconWrapper small ${language === 'FRENCH' ? 'active' : null}`} onClick={() => handleLanguage('FRENCH')}>
+              <FranceIcon />
             </div>
           </div>
         </article>

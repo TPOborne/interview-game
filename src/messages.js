@@ -52,6 +52,33 @@ const messages = {
     UNFOUND: 'Non trovato',
     RESTART: 'Riavvia',
     WAITING_FOR_HOST_RESTART: 'In attesa che l\'ospite riavvii la partita'
+  },
+  fr: {
+    NAME: 'Course de Mots',
+    HOW_TO_HEADING: 'Comment jouer',
+    BULLET_1: 'Héberger ou rejoindre un salon',
+    BULLET_2: 'Formez des mots avant les autres pour marquer des points',
+    BULLET_3: 'Le plus de points gagne',
+    HOST: 'Héberger',
+    JOIN: 'Rejoindre',
+    CREATE: 'Créer',
+    BACK: 'Retour',
+    HOST_LOBBY: 'Héberger le salon',
+    JOIN_LOBBY: 'Rejoindre le salon',
+    PLAYER_NAME: 'Nom du joueur',
+    CODE: 'Code',
+    LOBBY: 'Salon',
+    START: 'Démarrer',
+    WORDS_LEFT: '{value} mots restants',
+    WAITING_FOR_HOST: 'En attente que l\'hôte commence le jeu',
+    YOU_HAVE_WORD: 'Vous avez ce mot',
+    THEY_HAVE_WORD: '{value} a ce mot',
+    GIVE_UP: 'J\'abandonne!',
+    GAME_OVER: 'Fin du jeu',
+    FOUND: 'Trouvé',
+    UNFOUND: 'Non trouvé',
+    RESTART: 'Redémarrer',
+    WAITING_FOR_HOST_RESTART: 'En attente que l\'hôte redémarre le jeu'
   }
 }
 

@@ -3,6 +3,7 @@ import { FormattedMessage } from "react-intl";
 import LanguageIcon from '../assets/icons/language.svg?react';
 import UKIcon from '../assets/icons/flag-uk.svg?react';
 import ItalyIcon from '../assets/icons/flag-italy.svg?react';
+import FranceIcon from '../assets/icons/flag-france.svg?react';
 import { useLocale } from '../contexts/LocaleContext';
 
 const Header = () => {
@@ -34,6 +35,9 @@ const Header = () => {
           </div>
           <div className={`iconWrapper small ${locale === 'it' ? 'active' : null}`} onClick={() => handleLocale('it')}>
             <ItalyIcon />
+          </div>
+          <div className={`iconWrapper small ${locale === 'fr' ? 'active' : null}`} onClick={() => handleLocale('fr')}>
+            <FranceIcon />
           </div>
         </div>
       </div>

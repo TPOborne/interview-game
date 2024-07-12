@@ -35,7 +35,7 @@ header {
   .options {
     position: absolute;
     top: 0;
-    right: -80px;
+    right: -120px;
     display: flex;
     align-items: center;
     height: 40px;
