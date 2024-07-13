@@ -124,7 +124,7 @@ const View = () => {
 	useEffect(() => {
     const loadWordList = async () => {
       try {
-				let file = "/english3.txt";
+				let file = "/english.txt";
 				if (roomData.language === 'ITALIAN') file = '/italiano.txt';
 				if (roomData.language === 'FRENCH') file = '/french.txt';
         const response = await fetch(file);
