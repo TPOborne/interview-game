@@ -33,6 +33,11 @@ const splitAndShuffleString = (str) => {
   return shuffledArray;
 };
 
+const shuffleString = (str) => {
+  const splitIntoArray = splitAndShuffleString(str);
+  return splitIntoArray.join('');
+}
+
 const canFormWords = (words, letters) => {
   // Helper function to count the frequency of each letter in an array
   const letterCount = (arr) => {
@@ -75,4 +80,4 @@ const canFormWords = (words, letters) => {
 };
 
 // Export the function
-export { generateRandomCode, splitAndShuffleString, shuffleArray, canFormWords };
+export { generateRandomCode, splitAndShuffleString, shuffleArray, canFormWords, shuffleString };

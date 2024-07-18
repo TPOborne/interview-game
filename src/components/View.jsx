@@ -8,7 +8,7 @@ import Lobby from './pages/Lobby';
 import End from './pages/End';
 import { useWebSocket } from '../contexts/WebSocketContext';
 import { ACTIONS } from '../constants';
-import { shuffleArray, canFormWords } from '../utils/utils';
+import { shuffleArray, canFormWords, shuffleString } from '../utils/utils';
 
 const View = () => {
 	const ws = useWebSocket();
@@ -21,7 +21,7 @@ const View = () => {
 	});
 	const [errorMessage, setErrorMessage] = useState();
 	const [wordList, setWordList] = useState(null);
-	const [chosenWord, setChosenWord] = useState('');
+	const [shuffledWord, setShuffledWord] = useState('');
 	const [possibleWords, setPossibleWords] = useState([]);
 
 	const handleNext = (event, nextView) => {
@@ -34,7 +34,7 @@ const View = () => {
 
 	const handleStart = () => {
 		ws.current.send(
-			JSON.stringify({ action: ACTIONS.START, roomCode: roomData.code, word: chosenWord })
+			JSON.stringify({ action: ACTIONS.START, roomCode: roomData.code, word: shuffledWord })
 		);
 	};
 
@@ -75,8 +75,8 @@ const View = () => {
 							break;
 						case ACTIONS.RESTART:
 							setRoomData((prev) => ({ ...prev, code: roomCode, players, letters, givenUp }));
-							const randomWord = shuffleArray(wordList.filter((word) => word.length === 9))[0];
-							setChosenWord(randomWord);
+							const randomisedString = shuffleString(shuffleArray(wordList.filter((word) => word.length === 9))[0]);
+							setShuffledWord(randomisedString);
 							handleNext(null, 3);
 						case ACTIONS.PONG:
 							break;
@@ -135,9 +135,8 @@ const View = () => {
         const arrayOfWords = text.split("\n");
         const cleanedWords = arrayOfWords.map(word => word.trim()).filter((word) => word.length >= 4 && word.length <= 9);
         setWordList(cleanedWords);
-				const randomWord = shuffleArray(cleanedWords.filter((word) => word.length === 9))[0];
-				setChosenWord(randomWord);
-				console.log('updated wordList and chosenWord because language file changed');
+				const randomisedString = shuffleString(shuffleArray(cleanedWords.filter((word) => word.length === 9))[0]);
+				setShuffledWord(randomisedString);
       } catch (error) {
         console.error("Error:", error.message);
         setWordList(null);
@@ -157,7 +156,7 @@ const View = () => {
 		<main>
 			<div className="contents">
 				{currentIndex === 0 && <Home nextHandler={handleNext} />}
-				{currentIndex === 1 && <CreateLobby playerId={playerId} chosenWord={chosenWord} backHandler={handleBack} />}
+				{currentIndex === 1 && <CreateLobby playerId={playerId} backHandler={handleBack} />}
 				{currentIndex === 2 && <JoinLobby playerId={playerId} backHandler={handleBack} />}
 				{currentIndex === 3 && <Lobby startHandler={handleStart} roomData={roomData} playerId={playerId} />}
 				{currentIndex === 4 && <Game roomData={roomData} playerId={playerId} wordList={wordList} possibleWords={possibleWords} />}
