@@ -9,3 +9,9 @@ export const ACTIONS = {
   PING: "PING",
   PONG: "PONG"
 };
+
+export const LANGUAGES = {
+  ENGLISH: "ENGLISH",
+  ITALIAN: "ITALIAN",
+  FRENCH: "FRENCH"
+}

@@ -4,12 +4,12 @@ import UKIcon from '../../assets/icons/flag-uk.svg?react';
 import ItalyIcon from '../../assets/icons/flag-italy.svg?react';
 import FranceIcon from '../../assets/icons/flag-france.svg?react';
 import { useWebSocket } from '../../contexts/WebSocketContext';
-import { ACTIONS } from '../../constants';
+import { ACTIONS, LANGUAGES } from '../../constants';
 
 const CreateLobby = ({ playerId, backHandler }) => {
   const ws = useWebSocket();
   const [name, setName] = useState('');
-  const [language, setLanguage] = useState('ENGLISH');
+  const [language, setLanguage] = useState(LANGUAGES.ENGLISH);
 
   const handleInput = (event) => {
     const { value } = event.target;

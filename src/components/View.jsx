@@ -7,7 +7,7 @@ import JoinLobby from './pages/JoinLobby';
 import Lobby from './pages/Lobby';
 import End from './pages/End';
 import { useWebSocket } from '../contexts/WebSocketContext';
-import { ACTIONS } from '../constants';
+import { ACTIONS, LANGUAGES } from '../constants';
 import { shuffleArray, canFormWords, shuffleString } from '../utils/utils';
 
 const View = () => {
@@ -24,7 +24,7 @@ const View = () => {
 	const [shuffledWord, setShuffledWord] = useState('');
 	const [possibleWords, setPossibleWords] = useState([]);
 
-	const handleNext = (event, nextView) => {
+	const handleNext = (_event, nextView) => {
 		if (nextView === null || nextView === undefined) {
 			setCurrentIndex((prev) => prev + 1);
 		} else {
@@ -44,7 +44,7 @@ const View = () => {
 		);
 	};
 
-	const handleBack = (event, numberBack) => {
+	const handleBack = (_event, numberBack) => {
 		if (currentIndex > 0) {
 			const newIndex = currentIndex - (numberBack ? numberBack : 1);
 			setCurrentIndex(newIndex);
@@ -125,8 +125,8 @@ const View = () => {
     const loadWordList = async () => {
       try {
 				let file = "/english.txt";
-				if (roomData.language === 'ITALIAN') file = '/italiano.txt';
-				if (roomData.language === 'FRENCH') file = '/french.txt';
+				if (roomData.language === LANGUAGES.ITALIAN) file = '/italiano.txt';
+				if (roomData.language === LANGUAGES.FRENCH) file = '/french.txt';
         const response = await fetch(file);
         if (!response.ok) {
           throw new Error("Failed to fetch the file");
