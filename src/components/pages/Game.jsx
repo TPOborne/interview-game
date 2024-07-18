@@ -61,7 +61,6 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
     if (!wordList) return false;
     const isValid = wordList.includes(currentWord);
     return isValid;
-    // emit to server
   }, [wordList]);
 
   useEffect(() => {
@@ -79,7 +78,6 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
       setAnimating(false);
       handleDelete();
     }, 1500);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [word, checkWordValid, ws, roomData.code, letters]);
 
   useEffect(() => {
@@ -148,7 +146,11 @@ const Game = ({ roomData, playerId, wordList, possibleWords }) => {
       </h6>
       <div className="grid">
         {letters.map((letter) => (
-          <div key={letter.id} className={`tile ${!letter.selected ? null : (animating ? 'correct' : 'selected')}`} onClick={() => handleClick(letter)}>
+          <div
+            key={letter.id}
+            className={`tile ${!letter.selected ? null : (animating ? 'correct' : 'selected')}`}
+            onClick={() => handleClick(letter)}
+          >
             {letter.value}
           </div>
         ))}

@@ -19,7 +19,12 @@ const CreateLobby = ({ playerId, backHandler }) => {
   const handleCreate = () => {
     if (!name.length) return;
     ws.current.send(
-      JSON.stringify({ action: ACTIONS.CREATE_ROOM, id: playerId, username: name, language })
+      JSON.stringify({
+        action: ACTIONS.CREATE_ROOM,
+        id: playerId,
+        username: name,
+        language
+      })
     );
   };
 
@@ -34,25 +39,42 @@ const CreateLobby = ({ playerId, backHandler }) => {
   return (
     <div className="infoWrapper">
       <div className="info">
-        <h1><FormattedMessage id="HOST_LOBBY" /></h1>
+        <h1>
+          <FormattedMessage id="HOST_LOBBY" />
+        </h1>
         <article>
-          <h2><FormattedMessage id="PLAYER_NAME" /></h2>
+          <h2>
+            <FormattedMessage id="PLAYER_NAME" />
+          </h2>
           <input type="text" value={name} onChange={handleInput} />
           <div className="languageInputs">
-            <div className={`iconWrapper small ${language === 'ENGLISH' ? 'active' : null}`} onClick={() => handleLanguage('ENGLISH')}>
+            <div
+              className={`iconWrapper small ${language === 'ENGLISH' ? 'active' : null}`}
+              onClick={() => handleLanguage('ENGLISH')}
+            >
               <UKIcon />
             </div>
-            <div className={`iconWrapper small ${language === 'ITALIAN' ? 'active' : null}`} onClick={() => handleLanguage('ITALIAN')}>
+            <div
+              className={`iconWrapper small ${language === 'ITALIAN' ? 'active' : null}`}
+              onClick={() => handleLanguage('ITALIAN')}
+            >
               <ItalyIcon />
             </div>
-            <div className={`iconWrapper small ${language === 'FRENCH' ? 'active' : null}`} onClick={() => handleLanguage('FRENCH')}>
+            <div
+              className={`iconWrapper small ${language === 'FRENCH' ? 'active' : null}`}
+              onClick={() => handleLanguage('FRENCH')}
+            >
               <FranceIcon />
             </div>
           </div>
         </article>
         <div className="buttonsWrapper">
-          <button onClick={handleCreate} disabled={name.length < 2}><FormattedMessage id="CREATE" /></button>
-          <button onClick={handleBack}><FormattedMessage id="BACK" /></button>
+          <button onClick={handleCreate} disabled={name.length < 2}>
+            <FormattedMessage id="CREATE" />
+          </button>
+          <button onClick={handleBack}>
+            <FormattedMessage id="BACK" />
+          </button>
         </div>
       </div>
     </div >

@@ -21,7 +21,12 @@ const JoinLobby = ({ playerId, backHandler }) => {
   const handleJoin = () => {
     if (!name || code.length !== 4) return;
     ws.current.send(
-      JSON.stringify({ action: ACTIONS.JOIN_ROOM, id: playerId, username: name, roomCode: code })
+      JSON.stringify({ 
+        action: ACTIONS.JOIN_ROOM,
+        id: playerId,
+        username: name,
+        roomCode: code 
+      })
     );
   };
 
@@ -35,17 +40,35 @@ const JoinLobby = ({ playerId, backHandler }) => {
         <h1><FormattedMessage id="JOIN_LOBBY" /></h1>
         <div className="articleWrapper">
           <article>
-            <h2><FormattedMessage id="PLAYER_NAME" /></h2>
-            <input type="text" value={name} onChange={handleName} maxLength={12} />
+            <h2>
+              <FormattedMessage id="PLAYER_NAME" />
+            </h2>
+            <input
+              type="text"
+              value={name}
+              onChange={handleName}
+              maxLength={12}
+            />
           </article>
           <article>
-            <h2><FormattedMessage id="CODE" /></h2>
-            <input type="text" value={code} onChange={handleCode} maxLength={4} />
+            <h2>
+              <FormattedMessage id="CODE" />
+            </h2>
+            <input
+              type="text"
+              value={code}
+              onChange={handleCode}
+              maxLength={4}
+            />
           </article>
         </div>
         <div className="buttonsWrapper">
-          <button onClick={handleJoin}><FormattedMessage id="JOIN" /></button>
-          <button onClick={(e) => handleBack(e)}><FormattedMessage id="BACK" /></button>
+          <button onClick={handleJoin}>
+            <FormattedMessage id="JOIN" />
+          </button>
+          <button onClick={(e) => handleBack(e)}>
+            <FormattedMessage id="BACK" />
+          </button>
         </div>
       </div>
     </div >

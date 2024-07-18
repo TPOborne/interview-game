@@ -18,8 +18,12 @@ const Home = ({ nextHandler }) => {
           </ul>
         </article>
         <div className="buttonsWrapper">
-          <button onClick={nextHandler}><FormattedMessage id="HOST" /></button>
-          <button onClick={(e) => nextHandler(e, 2)}><FormattedMessage id="JOIN" /></button>
+          <button onClick={nextHandler}>
+            <FormattedMessage id="HOST" />
+          </button>
+          <button onClick={(e) => nextHandler(e, 2)}>
+            <FormattedMessage id="JOIN" />
+          </button>
         </div>
       </div>
     </div >

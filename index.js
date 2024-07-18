@@ -18,7 +18,6 @@ import {
 const app = express();
 const __dirname = path.resolve();
 
-// Serve static files in production or proxy in development
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/dist")));
 } else {

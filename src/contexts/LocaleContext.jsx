@@ -7,6 +7,8 @@ export const useLocale = () => useContext(LocaleContext);
 export const LocaleProvider = ({ children }) => {
   const [locale, setLocale] = useState('en');
   return (
-    <LocaleContext.Provider value={{ locale, setLocale }}>{children}</LocaleContext.Provider>
+    <LocaleContext.Provider value={{ locale, setLocale }}>
+      {children}
+    </LocaleContext.Provider>
   );
 };
