@@ -21,6 +21,10 @@ const __dirname = path.resolve();
 if (process.env.NODE_ENV === "production") {
   console.log('using prod mode');
   app.use(express.static(path.join(__dirname, "/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
+  });
 } else {
   console.log('using dev mode');
   (async () => {
@@ -96,10 +100,11 @@ app.get("/", (req, res) => {
   res.send("Server is running!");
 });
 
-server.listen(8080, () => {
+const PORT = process.env.PORT || 8080
+server.listen(PORT, () => {
   if (process.env.NODE_ENV === "production") { 
-    console.log('running in prod mode');
+    console.log(`Running in production mode on port ${PORT}`);
   } else {
-    console.log("WebSocket server is running on http://localhost:8080");
+    console.log(`WebSocket server is running on http://localhost:${PORT}`);
   }
 });
