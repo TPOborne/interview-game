@@ -92,6 +92,10 @@ wss.on("connection", (ws) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
+
 server.listen(8080, () => {
   if (process.env.NODE_ENV === "production") { 
     console.log('running in prod mode');
