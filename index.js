@@ -19,8 +19,10 @@ const app = express();
 const __dirname = path.resolve();
 
 if (process.env.NODE_ENV === "production") {
+  console.log('using prod mode');
   app.use(express.static(path.join(__dirname, "/dist")));
 } else {
+  console.log('using dev mode');
   (async () => {
     const { createProxyMiddleware } = await import("http-proxy-middleware");
     app.use(
@@ -91,5 +93,9 @@ wss.on("connection", (ws) => {
 });
 
 server.listen(8080, () => {
-  console.log("WebSocket server is running on http://localhost:8080");
+  if (process.env.NODE_ENV === "production") { 
+    console.log('running in prod mode');
+  } else {
+    console.log("WebSocket server is running on http://localhost:8080");
+  }
 });
